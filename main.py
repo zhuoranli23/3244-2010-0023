@@ -19,8 +19,6 @@ def get_args():
     parser.add_argument('--crop_width', type=int, default=128) # changed from 256
     parser.add_argument('--lamda', type=int, default=10)
     parser.add_argument('--idt_coef', type=float, default=0.5)
-    parser.add_argument('--training', type=bool, default=False)
-    parser.add_argument('--testing', type=bool, default=False)
     parser.add_argument('--results_dir', type=str, default='./results')
     parser.add_argument('--dataset_dir', type=str, default='./datasets/horse2zebra')
     parser.add_argument('--checkpoint_dir', type=str, default='./checkpoints/horse2zebra')
@@ -35,24 +33,19 @@ def get_args():
 
 
 def main():
-  args = get_args()
+    args = get_args()
 
-  create_link(args.dataset_dir)
+    create_link(args.dataset_dir)
 
-  str_ids = args.gpu_ids.split(',')
-  args.gpu_ids = []
-  for str_id in str_ids:
-    id = int(str_id)
-    if id >= 0:
-      args.gpu_ids.append(id)
-  print(not args.no_dropout)
-  if args.training:
-      print("Training")
-      md = model.cycleGAN(args)
-      md.train(args)
-  if args.testing:
-      print("Testing")
-      tst.test(args)
+    str_ids = args.gpu_ids.split(',')
+    args.gpu_ids = []
+    for str_id in str_ids:
+        id = int(str_id)
+        if id >= 0:
+            args.gpu_ids.append(id)
+    print(not args.no_dropout)
+    md = model.cycleGAN(args)
+    md.train(args)
 
 
 if __name__ == '__main__':
