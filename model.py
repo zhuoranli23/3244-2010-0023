@@ -87,6 +87,10 @@ class cycleGAN(object):
 
         for epoch in range(self.start_epoch, args.epochs):
 
+            if epoch > 1:
+                print('generating test result...')
+                os.system('python test.py')
+
             lr = self.g_optimizer.param_groups[0]['lr']
             print('learning rate = %.7f' % lr)
 
@@ -116,13 +120,15 @@ class cycleGAN(object):
                 a_recon = self.Gab(b_fake)
                 b_recon = self.Gba(a_fake)
 
-                a_idt = self.Gab(a_real)
-                b_idt = self.Gba(b_real)
+                # a_idt = self.Gab(a_real)
+                # b_idt = self.Gba(b_real)
 
                 # Identity losses
                 ###################################################
-                a_idt_loss = self.identity_criteron(a_idt, a_real) * args.lamda * args.idt_coef
-                b_idt_loss = self.identity_criteron(b_idt, b_real) * args.lamda * args.idt_coef
+                # a_idt_loss = self.identity_criteron(a_idt, a_real) * args.lamda * args.idt_coef
+                # b_idt_loss = self.identity_criteron(b_idt, b_real) * args.lamda * args.idt_coef
+                a_idt_loss = 0
+                b_idt_loss = 0
 
                 # Adversarial losses
                 ###################################################
@@ -196,6 +202,7 @@ class cycleGAN(object):
 
             # Override the latest checkpoint
             #######################################################
+            '''
             utils.save_checkpoint({'epoch': epoch + 1,
                                    'Da': self.Da.state_dict(),
                                    'Db': self.Db.state_dict(),
@@ -204,6 +211,16 @@ class cycleGAN(object):
                                    'd_optimizer': self.d_optimizer.state_dict(),
                                    'g_optimizer': self.g_optimizer.state_dict()},
                                   '%s/epoch %d.ckpt' % (args.checkpoint_dir, epoch+1))
+            '''
+            utils.save_checkpoint({'epoch': epoch + 1,
+                        'Da': self.Da.state_dict(),
+                        'Db': self.Db.state_dict(),
+                        'Gab': self.Gab.state_dict(),
+                        'Gba': self.Gba.state_dict(),
+                        'd_optimizer': self.d_optimizer.state_dict(),
+                        'g_optimizer': self.g_optimizer.state_dict()},
+                        '%s/latest.ckpt' % (args.checkpoint_dir))
+            
 
             # Update learning rates
             ########################
