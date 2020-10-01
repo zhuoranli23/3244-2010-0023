@@ -5,6 +5,7 @@ from torch.autograd import Variable
 import torchvision
 import torchvision.datasets as dsets
 import torchvision.transforms as transforms
+from torchvision.utils import save_image
 import utils
 from discriminators import define_Dis
 from generators import define_Gen
@@ -20,6 +21,11 @@ ngf = 64
 norm = 'instance'
 no_dropout = False
 gpu_ids = [0]
+
+# Configs to eval
+is_to_save = True
+coloured_dir = './results/coloured'
+original_dir = './results/original'
 
 transform = transforms.Compose(
     [transforms.Resize((crop_height,crop_width)),
@@ -69,6 +75,16 @@ def save_sample_image(len):
             b_recon_test = Gba(a_fake_test)
 
             res.extend([a_real_test, b_fake_test, b_real_test])
+            
+            if is_to_save:
+                if not os.path.isdir(results_dir):
+                    os.makedirs(results_dir)
+                if not os.path.isdir(coloured_dir):
+                    os.makedirs(coloured_dir)
+                if not os.path.isdir(original_dir):
+                    os.makedirs(original_dir)
+                save_image(b_fake_test, coloured_dir+'/%d.jpg' % i)
+                save_image(b_real_test, original_dir+'/%d.jpg' % i)
 
     pic = (torch.cat(res, dim=0).data + 1) / 2.0
 
