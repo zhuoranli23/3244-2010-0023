@@ -23,7 +23,8 @@ current_time = str(datetime.datetime.now().timestamp())
 train_log_dir = 'runs/train/' + current_time
 test_log_dir = 'runs/test/' + current_time
 train_summary_writer = SummaryWriter(train_log_dir)
-test_summary_writer = SummaryWriter(test_log_dir)
+# in case we need to do a tensorboard for testing 
+#test_summary_writer = SummaryWriter(test_log_dir)
 
 
 class cycleGAN(object):
@@ -209,6 +210,7 @@ class cycleGAN(object):
                                             (epoch, i + 1, min(len(a_loader), len(b_loader)),
                                                             gen_loss,a_dis_loss+b_dis_loss))
 
+                # Actual writing to logs file for tensorboard
                 train_summary_writer.add_scalar(“Generator Loss”, gen_loss.cpu().detach().numpy(), epoch)
                 train_summary_writer.add_scalar(“Discriminator Loss”, (a_dis_loss + b_dis_loss).cpu().detach().numpy(), epoch)
             ##################################################
@@ -242,5 +244,6 @@ class cycleGAN(object):
             self.g_lr_scheduler.step()
             self.d_lr_scheduler.step()
 
+        train_summary_writer.close()
 
 
