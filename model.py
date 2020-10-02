@@ -13,6 +13,18 @@ from generators import define_Gen
 from discriminators import define_Dis
 from ops import set_grad
 
+#init tensorboard 
+from torch.utils.tensorboard import SummaryWriter
+import datetime
+%load_ext tensorboard
+
+current_time = str(datetime.datetime.now().timestamp())
+#default logs directory = runs
+train_log_dir = 'runs/train/' + current_time
+test_log_dir = 'runs/test/' + current_time
+train_summary_writer = SummaryWriter(train_log_dir)
+test_summary_writer = SummaryWriter(test_log_dir)
+
 
 class cycleGAN(object):
     def __init__(self,args):
@@ -196,6 +208,9 @@ class cycleGAN(object):
                 print("Epoch: (%3d) (%5d/%5d) | Gen Loss:%.2e | Dis Loss:%.2e" % 
                                             (epoch, i + 1, min(len(a_loader), len(b_loader)),
                                                             gen_loss,a_dis_loss+b_dis_loss))
+
+                train_summary_writer.add_scalar(“Generator Loss”, gen_loss.cpu().detach().numpy(), epoch)
+                train_summary_writer.add_scalar(“Discriminator Loss”, (a_dis_loss + b_dis_loss).cpu().detach().numpy(), epoch)
             ##################################################
             # END TRAINING FOR ONE EPOCH
             ##################################################
