@@ -16,6 +16,7 @@ from generators import define_Gen
 from discriminators import define_Dis
 from ops import set_grad
 
+import pytorch_ssim
 
 class cycleGAN(object):
     def __init__(self, args):
@@ -40,7 +41,7 @@ class cycleGAN(object):
         # Define loss criteria
         self.identity_criteron = nn.L1Loss()
         self.adversarial_criteron = nn.MSELoss()
-        self.cycle_consistency_criteron = nn.L1Loss()
+        self.cycle_consistency_criteron = pytorch_ssim.SSIM() # nn.L1Loss()
 
         # Define optimizers
         self.g_optimizer = torch.optim.Adam(itertools.chain(self.Gab.parameters(), self.Gba.parameters()), lr=args.lr,
