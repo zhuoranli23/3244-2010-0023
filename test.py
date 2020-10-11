@@ -19,7 +19,7 @@ batch_size = 1
 ngf = 64
 norm = 'instance'
 no_dropout = False
-gpu_ids = [0]
+gpu_ids = []
 
 transform = transforms.Compose(
     [transforms.Resize((crop_height,crop_width)),

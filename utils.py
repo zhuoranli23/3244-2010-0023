@@ -58,7 +58,7 @@ def save_checkpoint(state, save_path):
 
 # To load the checkpoint
 def load_checkpoint(ckpt_path, map_location=None):
-    ckpt = torch.load(ckpt_path, map_location=map_location)
+    ckpt = torch.load(ckpt_path, map_location='cpu')
     print(' [*] Loading checkpoint from %s succeed!' % ckpt_path)
     return ckpt
 

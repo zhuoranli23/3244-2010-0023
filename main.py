@@ -45,7 +45,7 @@ def main():
         id = int(str_id)
         if id >= 0:
             args.gpu_ids.append(id)
-    print(not args.no_dropout)
+    
     md = model.cycleGAN(args)
     md.train(args)
 

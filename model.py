@@ -15,7 +15,9 @@ import utils
 from generators import define_Gen
 from discriminators import define_Dis
 from ops import set_grad
+import random
 
+noisy_label = 0.025
 
 class cycleGAN(object):
     def __init__(self, args):
@@ -225,15 +227,29 @@ class cycleGAN(object):
                 a_fake_dis = self.Da(a_fake)
                 b_real_dis = self.Db(b_real)
                 b_fake_dis = self.Db(b_fake)
-                real_label = utils.cuda(Variable(torch.ones(a_real_dis.size())))
-                fake_label = utils.cuda(Variable(torch.zeros(a_fake_dis.size())))
-
+                real_label = utils.cuda(Variable(torch.full(a_real_dis.size(), random.random()*0.2+0.9)))
+                fake_label = utils.cuda(Variable(torch.full(a_fake_dis.size(),random.random()*0.2)))
+                
                 # Discriminator losses
                 ##################################################
-                a_dis_real_loss = self.adversarial_criteron(a_real_dis, real_label)
-                a_dis_fake_loss = self.adversarial_criteron(a_fake_dis, fake_label)
-                b_dis_real_loss = self.adversarial_criteron(b_real_dis, real_label)
-                b_dis_fake_loss = self.adversarial_criteron(b_fake_dis, fake_label)
+                r = random.random()
+                real_label_a=real_label
+                fake_label_a=fake_label
+                if r < noisy_label:
+                    t=real_label_a
+                    real_label_a=fake_label_a
+                    fake_label_a=t
+                a_dis_real_loss = self.adversarial_criteron(a_real_dis, real_label_a)
+                a_dis_fake_loss = self.adversarial_criteron(a_fake_dis, fake_label_a)
+                r = random.random()
+                real_label_b=real_label
+                fake_label_b=fake_label
+                if r < noisy_label:
+                    t=real_label_b
+                    real_label_b=fake_label_b
+                    fake_label_b=t
+                b_dis_real_loss = self.adversarial_criteron(b_real_dis, real_label_b)
+                b_dis_fake_loss = self.adversarial_criteron(b_fake_dis, fake_label_b)
 
                 # Total discriminators losses
                 a_dis_loss = (a_dis_real_loss + a_dis_fake_loss) * 0.5
@@ -253,10 +269,12 @@ class cycleGAN(object):
             ##################################################
             # END TRAINING FOR ONE EPOCH
             ##################################################
+            
             self.writer.add_scalar('Gen Loss', running_Gen_loss / min(len(a_loader), len(b_loader)), epoch)
             self.writer.add_scalar('Dis Loss', running_Dis_loss / min(len(a_loader), len(b_loader)), epoch)
             self.writer.add_scalar('Gen_LR', self.g_lr_scheduler.get_lr()[0], epoch)
             self.writer.add_scalar('Dis_LR', self.d_lr_scheduler.get_lr()[0], epoch)
+            
             # Override the latest checkpoint
             #######################################################
             '''
