@@ -16,6 +16,8 @@ def get_args():
     parser.add_argument('--gpu_ids', type=str, default='0')
     parser.add_argument('--crop_height', type=int, default=64) # changed from 256
     parser.add_argument('--crop_width', type=int, default=64) # changed from 256
+    parser.add_argument('--test_crop_height', type=int, default=128)  # changed from 256
+    parser.add_argument('--test_crop_width', type=int, default=128)  # changed from 256
     parser.add_argument('--lamda', type=int, default=10)
     parser.add_argument('--idt_coef', type=float, default=0.5)
     parser.add_argument('--results_dir', type=str, default='./results')
@@ -27,6 +29,7 @@ def get_args():
     parser.add_argument('--ndf', type=int, default=64, help='# of discrim filters in first conv layer')
     parser.add_argument('--gen_net', type=str, default='resnet_9blocks')
     parser.add_argument('--dis_net', type=str, default='n_layers')
+    parser.add_argument('--test_length', type=int, default=8, help="number of testing data")
     args = parser.parse_args()
     return args
 
