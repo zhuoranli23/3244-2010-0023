@@ -1,5 +1,6 @@
 import itertools
 import functools
+import datetime
 
 import os
 import numpy as np
@@ -77,7 +78,9 @@ class cycleGAN(object):
             self.start_epoch = 0
 
         # Tensorboard Setup
-        self.writer = SummaryWriter('logs/pokemon_coloring')
+        current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        train_log_dir = 'logs/sketch2pokemon/' + current_time
+        self.writer = SummaryWriter(train_log_dir)
 
         # Stability variables setup
         self.last_test_output = []
@@ -127,7 +130,7 @@ class cycleGAN(object):
                 s_ranges = [0, 256]
                 v_ranges = [0, 256]
                 ranges = h_ranges + s_ranges + v_ranges# concat lists
-                # Use the 0-th and 1-st channels
+                # Use 0,1,2nd channels
                 channels = [0, 1, 2]
                 hist_base = cv2.calcHist([hsv_base], channels, None, histSize, ranges, accumulate=False)
                 cv2.normalize(hist_base, hist_base, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
