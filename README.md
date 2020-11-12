@@ -10,6 +10,8 @@ Email: e0273876@u.nus.edu, e0201414@u.nus.edu, e0148570@u.nus.edu, e0376940@u.nu
 
 [Video](https://www.youtube.com/watch?v=I-WMCV1DQbo)
 
+![greyscale](./sample/greyscale.png)
+
 ## Usage
 
 * Download datasets: use [this script](https://github.com/arnab39/cycleGAN-PyTorch/blob/master/download_dataset.sh) via `sh ./download_dataset.sh horse2zebra`
