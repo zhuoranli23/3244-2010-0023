@@ -78,7 +78,8 @@ class cycleGAN(object):
             self.start_epoch = 0
 
         # Tensorboard Setup
-        current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        # current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        current_time = '20201024-102158'
         train_log_dir = 'logs/sketch2pokemon/' + current_time
         self.writer = SummaryWriter(train_log_dir)
 
@@ -233,15 +234,15 @@ class cycleGAN(object):
                 a_recon = self.Gab(b_fake)
                 b_recon = self.Gba(a_fake)
 
-                # a_idt = self.Gab(a_real)
-                # b_idt = self.Gba(b_real)
+                a_idt = self.Gab(a_real)
+                b_idt = self.Gba(b_real)
 
                 # Identity losses
                 ###################################################
-                # a_idt_loss = self.identity_criteron(a_idt, a_real) * args.lamda * args.idt_coef
-                # b_idt_loss = self.identity_criteron(b_idt, b_real) * args.lamda * args.idt_coef
-                a_idt_loss = 0
-                b_idt_loss = 0
+                a_idt_loss = self.identity_criteron(a_idt, a_real) * args.lamda * args.idt_coef
+                b_idt_loss = self.identity_criteron(b_idt, b_real) * args.lamda * args.idt_coef
+                # a_idt_loss = 0
+                # b_idt_loss = 0
 
                 # Adversarial losses
                 ###################################################
