@@ -14,7 +14,7 @@ Email: e0273876@u.nus.edu, e0201414@u.nus.edu, e0148570@u.nus.edu, e0376940@u.nu
 
 ## Usage
 
-* Download datasets: use [this script](https://github.com/arnab39/cycleGAN-PyTorch/blob/master/download_dataset.sh) via `sh ./download_dataset.sh horse2zebra`
+* Download datasets: [sketch2pokemon](https://www.kaggle.com/norod78/sketch2pokemon)
 * Train the model: `python main.py`
 * Test the model
     * rename the latest checkpoint in `checkpoints` folder into `latest.ckpt`
@@ -25,7 +25,7 @@ Email: e0273876@u.nus.edu, e0201414@u.nus.edu, e0148570@u.nus.edu, e0376940@u.nu
 * Files for training/testing the model:
    * Network definitions for D and G: `discriminators.py` and `generators.py` 
    * CycleGAN architecture: `model.py`
-   * Helper functions: `ops.py`, `utils.py`, `extractGreyScale.py`
+   * Helper functions: `ops.py`, `utils.py`, `extractGreyScale.py` (converting colored trainB to greyscale trainA)
 * Files for evaluating the model
    * `eval_utils.py`
    * `test.ipynb`
